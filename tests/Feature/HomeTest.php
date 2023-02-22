@@ -17,4 +17,10 @@ class HomeTest extends TestCase
         $response = $this->get('/');
         $response->assertRedirect('/home');
     }
+
+    public function testCanSeeDateInHome(): void
+    {
+        $response = $this->get('/home');
+        $response->assertSeeTextInOrder(['年', '月', '日']);
+    }
 }
