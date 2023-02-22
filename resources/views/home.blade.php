@@ -14,10 +14,12 @@
         </tr>
       </thead>
       <tbody>
+        @foreach ($notices as $notice)
         <tr>
-          <td>2023年1月1日</td>
-          <td>予約アプリを公開しました。設備の予約にお使いください。</td>
+          <td>{{ date('Y年n月j日', strtotime($notice->published_on)); }}</td>
+          <td>{{ $notice->title }}</td>
         </tr>
+        @endforeach
       </tbody>
     </table>
   </div>
