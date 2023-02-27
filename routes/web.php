@@ -15,6 +15,6 @@ Route::get('/home', function () {
 });
 
 Route::get('/facilities/{facility_id}', function (int $facility_id) {
-    $facility = Facility::find($facility_id);
+    $facility = Facility::findOrFail($facility_id);
     return view('facilities.index', compact('facility'));
 });
