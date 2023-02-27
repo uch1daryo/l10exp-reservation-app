@@ -19,4 +19,10 @@ class FacilityTest extends TestCase
         $response->assertSee('<div id="calendar"></div>', false)
                  ->assertSeeText($facility->name);
     }
+
+    public function testCanSeeNotFoundWhenSpecifiedFacilityDoesNotExist(): void
+    {
+        $response = $this->get('/facilities/1234567890');
+        $response->assertStatus(404);
+    }
 }
