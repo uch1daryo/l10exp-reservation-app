@@ -1,0 +1,30 @@
+@extends('layouts.app')
+
+@section('title', '一覧')
+
+@section('content')
+<div class="mt-4">
+  <small><div id="calendar"></div></small>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      let calendarEl = document.getElementById('calendar');
+      let calendar = new FullCalendar.Calendar(calendarEl, {
+        themeSystem: 'bootstrap5',
+        initialView: 'timeGridWeek',
+        headerToolbar: {
+          left: 'today',
+          center: 'title',
+          right: 'next'
+        },
+        allDaySlot: false,
+        slotMinTime: '06:00:00',
+        slotMaxTime: '21:00:00',
+        contentHeight: 'auto',
+        timeZone: 'Asia/Tokyo',
+        locale: 'ja'
+      });
+      calendar.render();
+    });
+  </script>
+</div>
+@endsection

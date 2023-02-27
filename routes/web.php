@@ -12,3 +12,7 @@ Route::get('/home', function () {
                      ->get();
     return view('home', compact('notices'));
 });
+
+Route::get('/facilities/{facility_id}', function () {
+    return view('facilities.index');
+});
