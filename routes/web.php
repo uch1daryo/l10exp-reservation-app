@@ -1,6 +1,7 @@
 <?php
 
 use App\Enums\NoticeState;
+use App\Models\Facility;
 use App\Models\Notice;
 use Illuminate\Support\Facades\Route;
 
@@ -13,6 +14,7 @@ Route::get('/home', function () {
     return view('home', compact('notices'));
 });
 
-Route::get('/facilities/{facility_id}', function () {
-    return view('facilities.index');
+Route::get('/facilities/{facility_id}', function (int $facility_id) {
+    $facility = Facility::find($facility_id);
+    return view('facilities.index', compact('facility'));
 });

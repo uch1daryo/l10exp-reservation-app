@@ -4,6 +4,7 @@
 
 @section('content')
 <div class="mt-4">
+  <h6 class="mb-4">{{ $facility->name }}</h6>
   <small><div id="calendar"></div></small>
   <script>
     document.addEventListener('DOMContentLoaded', function() {
