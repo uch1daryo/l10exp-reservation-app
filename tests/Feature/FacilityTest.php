@@ -12,14 +12,33 @@ class FacilityTest extends TestCase
 {
     use RefreshDatabase;
 
+    private Facility $facility;
+    private Reservation $reservation;
+
+    public function setUp(): void
+    {
+        parent::setUp();
+
+        $this->facility = new Facility();
+        $this->facility->name = 'A1会議室';
+        $this->facility->save();
+
+        $this->reservation = new Reservation();
+        $this->reservation->facility_id = $this->facility->id;
+        $this->reservation->user_name = '山田 太郎';
+        $this->reservation->user_email = 'yamadataro@example.com';
+        $this->reservation->purpose = '打ち合わせ';
+        $this->reservation->start_at = '2023-03-01 09:30:00';
+        $this->reservation->end_at = '2023-03-01 11:00:00';
+        $this->reservation->cancel_code = hash('sha256', spl_object_hash($this->reservation));
+        $this->reservation->save();
+    }
+
     public function testCanSeeCalendarThatSpecifiedFacility(): void
     {
-        $facility = new Facility();
-        $facility->name = 'A1会議室';
-        $facility->save();
-        $response = $this->get('/facilities/' . $facility->id);
+        $response = $this->get('/facilities/' . $this->facility->id);
         $response->assertSee('<div id="calendar"></div>', false)
-                 ->assertSeeText($facility->name);
+                 ->assertSeeText($this->facility->name);
     }
 
     public function testCanSeeNotFoundWhenSpecifiedFacilityDoesNotExist(): void
@@ -30,32 +49,18 @@ class FacilityTest extends TestCase
 
     public function testCanGetReservationThatSpecifiedFacility(): void
     {
-        $facility = new Facility();
-        $facility->name = 'A1会議室';
-        $facility->save();
-
-        $reservation = new Reservation();
-        $reservation->facility_id = $facility->id;
-        $reservation->user_name = '山田 太郎';
-        $reservation->user_email = 'yamadataro@example.com';
-        $reservation->purpose = '打ち合わせ';
-        $reservation->start_at = '2023-03-01 09:30:00';
-        $reservation->end_at = '2023-03-01 11:00:00';
-        $reservation->cancel_code = hash('sha256', spl_object_hash($reservation));
-        $reservation->save();
-
-        $response = $this->getJson('/api/facilities/' . $facility->id);
+        $response = $this->getJson('/api/facilities/' . $this->facility->id);
         $response->assertJson(fn (AssertableJson $json) =>
             $json->has(1)
                 ->first(fn (AssertableJson $json) =>
-                    $json->where('id', $reservation->id)
-                        ->where('facility_id', $reservation->facility_id)
-                        ->where('user_name', $reservation->user_name)
-                        ->where('user_email', $reservation->user_email)
-                        ->where('purpose', $reservation->purpose)
-                        ->where('start_at', $reservation->start_at)
-                        ->where('end_at', $reservation->end_at)
-                        ->where('cancel_code', $reservation->cancel_code)
+                    $json->where('id', $this->reservation->id)
+                        ->where('facility_id', $this->reservation->facility_id)
+                        ->where('user_name', $this->reservation->user_name)
+                        ->where('user_email', $this->reservation->user_email)
+                        ->where('purpose', $this->reservation->purpose)
+                        ->where('start_at', $this->reservation->start_at)
+                        ->where('end_at', $this->reservation->end_at)
+                        ->where('cancel_code', $this->reservation->cancel_code)
                         ->etc()
                 )
         );
