@@ -10,5 +10,15 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::get('/facilities/{facility_id}', function (int $facility_id) {
     $reservations = Facility::findOrFail($facility_id)->reservations;
-    return $reservations->toJson();
+    $events = [];
+    foreach ($reservations as $reservation) {
+        array_push($events, [
+            'id' => $reservation->id,
+            'title' => $reservation->purpose,
+            'start' => $reservation->start_at,
+            'end' => $reservation->end_at,
+            'description' => $reservation->user_name,
+        ]);
+    }
+    return response()->json($events);
 });
