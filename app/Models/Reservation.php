@@ -5,12 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Facility extends Model
+class Reservation extends Model
 {
     use HasFactory;
 
-    public function reservations()
+    public function facility()
     {
-        return $this->hasMany(Reservation::class);
+        return $this->belongsTo(Facility::class);
     }
 }

@@ -1,19 +1,14 @@
 <?php
 
+use App\Models\Facility;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
-/*
-|--------------------------------------------------------------------------
-| API Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register API routes for your application. These
-| routes are loaded by the RouteServiceProvider and all of them will
-| be assigned to the "api" middleware group. Make something great!
-|
-*/
-
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
+});
+
+Route::get('/facilities/{facility_id}', function (int $facility_id) {
+    $reservations = Facility::findOrFail($facility_id)->reservations;
+    return $reservations->toJson();
 });
