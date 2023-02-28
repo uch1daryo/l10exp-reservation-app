@@ -54,14 +54,10 @@ class FacilityTest extends TestCase
             $json->has(1)
                 ->first(fn (AssertableJson $json) =>
                     $json->where('id', $this->reservation->id)
-                        ->where('facility_id', $this->reservation->facility_id)
-                        ->where('user_name', $this->reservation->user_name)
-                        ->where('user_email', $this->reservation->user_email)
-                        ->where('purpose', $this->reservation->purpose)
-                        ->where('start_at', $this->reservation->start_at)
-                        ->where('end_at', $this->reservation->end_at)
-                        ->where('cancel_code', $this->reservation->cancel_code)
-                        ->etc()
+                        ->where('title', $this->reservation->purpose)
+                        ->where('start', $this->reservation->start_at)
+                        ->where('end', $this->reservation->end_at)
+                        ->where('description', $this->reservation->user_name)
                 )
         );
     }
