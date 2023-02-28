@@ -17,6 +17,12 @@
           center: 'title',
           right: 'next'
         },
+        events: "/api/facilities/{{ $facility->id }}",
+        eventDidMount: (e) => {
+          tippy(e.el, {
+            content: e.event.extendedProps.description
+          });
+        },
         allDaySlot: false,
         slotMinTime: '06:00:00',
         slotMaxTime: '21:00:00',
