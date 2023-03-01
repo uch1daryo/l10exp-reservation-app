@@ -8,7 +8,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::get('/facilities/{facility_id}', function (int $facility_id) {
+Route::get('/facilities/{facility_id}/reservations', function (int $facility_id) {
     $reservations = Facility::findOrFail($facility_id)->reservations;
     $events = [];
     foreach ($reservations as $reservation) {

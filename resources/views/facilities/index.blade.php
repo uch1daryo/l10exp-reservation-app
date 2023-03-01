@@ -17,7 +17,7 @@
           center: 'title',
           right: 'next'
         },
-        events: "/api/facilities/{{ $facility->id }}",
+        events: "/api/facilities/{{ $facility->id }}/reservations",
         eventDidMount: (e) => {
           tippy(e.el, {
             content: e.event.extendedProps.description

@@ -20,10 +20,10 @@
             <a class="nav-link" href="/home">Home</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="/facilities/1">A1会議室</a>
+            <a class="nav-link" href="/facilities/1/reservations">A1会議室</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="/facilities/2">A2会議室</a>
+            <a class="nav-link" href="/facilities/2/reservations">A2会議室</a>
           </li>
         </ul>
       </div>
