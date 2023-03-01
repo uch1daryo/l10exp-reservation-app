@@ -14,7 +14,7 @@ Route::get('/home', function () {
     return view('home', compact('notices'));
 });
 
-Route::get('/facilities/{facility_id}', function (int $facility_id) {
+Route::get('/facilities/{facility_id}', function ($facility_id) {
     $facility = Facility::findOrFail($facility_id);
     return view('facilities.index', compact('facility'));
-});
+})->whereNumber('facility_id');
