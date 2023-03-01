@@ -34,22 +34,31 @@ class FacilityTest extends TestCase
         $this->reservation->save();
     }
 
-    public function testCanSeeCalendarThatSpecifiedFacility(): void
+    /**
+     * @test
+     */
+    public function 設備を指定してカレンダーを表示できる(): void
     {
-        $response = $this->get('/facilities/' . $this->facility->id);
+        $response = $this->get('/facilities/' . $this->facility->id . '/reservations');
         $response->assertSee('<div id="calendar"></div>', false)
                  ->assertSeeText($this->facility->name);
     }
 
-    public function testCanSeeNotFoundWhenSpecifiedFacilityDoesNotExist(): void
+    /**
+     * @test
+     */
+    public function 存在しない設備を指定するとカレンダーは表示されない(): void
     {
-        $response = $this->get('/facilities/1234567890');
+        $response = $this->get('/facilities/1234567890/reservations');
         $response->assertStatus(404);
     }
 
-    public function testCanGetReservationThatSpecifiedFacility(): void
+    /**
+     * @test
+     */
+    public function 設備を指定して予約情報を取得できる(): void
     {
-        $response = $this->getJson('/api/facilities/' . $this->facility->id);
+        $response = $this->getJson('/api/facilities/' . $this->facility->id . '/reservations');
         $response->assertJson(fn (AssertableJson $json) =>
             $json->has(1)
                 ->first(fn (AssertableJson $json) =>
