@@ -13,13 +13,13 @@ class ReservationController extends Controller
     public function index(string $id): View
     {
         $facility = Facility::findOrFail($id);
-        return view('facilities.index', compact('facility'));
+        return view('reservations.index', compact('facility'));
     }
 
     public function create(string $id): View
     {
         $facility = Facility::findOrFail($id);
-        return view('facilities.create', compact('facility'));
+        return view('reservations.create', compact('facility'));
     }
 
     public function store(Request $request, string $id): RedirectResponse
