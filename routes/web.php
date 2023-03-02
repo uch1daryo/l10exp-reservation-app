@@ -1,20 +1,13 @@
 <?php
 
-use App\Enums\NoticeState;
+use App\Http\Controllers\HomeController;
 use App\Models\Facility;
-use App\Models\Notice;
 use App\Models\Reservation;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 Route::redirect('/', '/home');
-
-Route::get('/home', function () {
-    $notices = Notice::where('published_on', '<=', now())
-                     ->where('state', NoticeState::Published)
-                     ->get();
-    return view('home', compact('notices'));
-});
+Route::get('/home', [HomeController::class, 'index']);
 
 Route::get('/facilities/{facility_id}/reservations', function ($facility_id) {
     $facility = Facility::findOrFail($facility_id);
