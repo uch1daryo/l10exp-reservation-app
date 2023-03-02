@@ -80,4 +80,20 @@ class FacilityTest extends TestCase
         $response->assertSeeText('登録する');
     }
 
+    /**
+     * @test
+     */
+    public function 指定した設備の予約を登録できる(): void
+    {
+        $reservation = [
+            'user_name' => '鈴木 花子',
+            'user_email' => 'suzukihanako@example.com',
+            'purpose' => '期末試験',
+            'start_at' => '2023-03-02 09:00:00',
+            'end_at' => '2023-03-02 12:00:00',
+            'note' => '応用数学（佐藤先生）',
+        ];
+        $response = $this->post('/facilities/' . $this->facility->id . '/reservations', $reservation);
+        $this->assertDatabaseHas('reservations', $reservation);
+    }
 }
