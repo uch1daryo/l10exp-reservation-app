@@ -70,4 +70,14 @@ class FacilityTest extends TestCase
                 )
         );
     }
+
+    /**
+     * @test
+     */
+    public function 指定した設備の予約の登録画面を表示できる(): void
+    {
+        $response = $this->get('/facilities/' . $this->facility->id . '/reservations/create');
+        $response->assertSeeText('登録する');
+    }
+
 }
