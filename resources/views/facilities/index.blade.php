@@ -5,6 +5,12 @@
 @section('content')
 <div class="mt-4">
   <h6 class="mb-4">{{ $facility->name }}</h6>
+  @if (session('status'))
+  <div class="alert alert-info alert-dismissible fade show" role="alert">
+    {{ session('status') }}
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+  </div>
+  @endif
   <small><div id="calendar"></div></small>
   <script>
     document.addEventListener('DOMContentLoaded', function() {
