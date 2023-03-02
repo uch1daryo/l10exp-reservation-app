@@ -56,6 +56,15 @@ class FacilityTest extends TestCase
     /**
      * @test
      */
+    public function 番号でない設備を指定してもカレンダーは表示されない(): void
+    {
+        $response = $this->get('/facilities/abcd1234/reservations');
+        $response->assertStatus(404);
+    }
+
+    /**
+     * @test
+     */
     public function 設備を指定して予約情報を取得できる(): void
     {
         $response = $this->getJson('/api/facilities/' . $this->facility->id . '/reservations');
