@@ -15,19 +15,28 @@ class HomeTest extends TestCase
         $this->artisan('db:seed', ['--class' => 'TestDatabaseSeeder']);
     }
 
-    public function testCanGetHome(): void
+    /**
+     * @test
+     */
+    public function ホーム画面へのリクエストは成功する(): void
     {
         $response = $this->get('/home');
         $response->assertStatus(200);
     }
 
-    public function testCanRedirectFromRootToHome(): void
+    /**
+     * @test
+     */
+    public function ルートへのアクセスはホーム画面にリダイレクトされる(): void
     {
         $response = $this->get('/');
         $response->assertRedirect('/home');
     }
 
-    public function testCanSeeDateInHome(): void
+    /**
+     * @test
+     */
+    public function ホーム画面にはお知らせの年月日が表示される(): void
     {
         $response = $this->get('/home');
         $response->assertSeeTextInOrder(['年', '月', '日']);
