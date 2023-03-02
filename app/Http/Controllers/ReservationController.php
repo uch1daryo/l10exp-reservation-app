@@ -8,7 +8,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
-class FacilityReservationController extends Controller
+class ReservationController extends Controller
 {
     public function index(string $id): View
     {
