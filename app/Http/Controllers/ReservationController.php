@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\ReservationCollection;
 use App\Models\Facility;
 use App\Models\Reservation;
 use Illuminate\Http\RedirectResponse;
@@ -39,5 +40,11 @@ class ReservationController extends Controller
             'status',
             '登録が完了しました'
         );
+    }
+
+    public function reservationsByFacilityId(string $id)
+    {
+        $facility = Facility::findOrFail($id);
+        return new ReservationCollection($facility->reservations);
     }
 }
