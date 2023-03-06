@@ -7,6 +7,10 @@
   <form method="POST" action="/facilities/{{ $facility->id }}/reservations">
     @csrf
     <div class="mb-3">
+      <label for="facility_name" class="form-label">設備名</label>
+      <input class="form-control" type="text" value="{{ $facility->name }}" id="facility_name" name="facility_name" readonly>
+    </div>
+    <div class="mb-3">
       <label for="user_name" class="form-label">氏名</label>
       <input class="form-control" type="text" value="" id="user_name" name="user_name">
     </div>
@@ -20,11 +24,11 @@
     </div>
     <div class="mb-3">
       <label for="start_at" class="form-label">利用開始日時</label>
-      <input class="form-control" type="text" value="" id="start_at" name="start_at">
+      <input class="form-control" type="text" value="{{ $period['start'] }}" id="start_at" name="start_at" readonly>
     </div>
     <div class="mb-3">
       <label for="end_at" class="form-label">利用終了日時</label>
-      <input class="form-control" type="text" value="" id="end_at" name="end_at">
+      <input class="form-control" type="text" value="{{ $period['end'] }}" id="end_at" name="end_at" readonly>
     </div>
     <div class="mb-3">
       <label for="note" class="form-label">備考</label>

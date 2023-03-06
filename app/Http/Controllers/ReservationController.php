@@ -17,10 +17,14 @@ class ReservationController extends Controller
         return view('reservations.index', compact('facility'));
     }
 
-    public function create(string $id): View
+    public function create(Request $request, string $id): View
     {
         $facility = Facility::findOrFail($id);
-        return view('reservations.create', compact('facility'));
+        $period = [
+            'start' => str_replace('T', ' ', $request->start),
+            'end' => str_replace('T', ' ', $request->end),
+        ];
+        return view('reservations.create', compact('facility', 'period'));
     }
 
     public function store(Request $request, string $id): RedirectResponse

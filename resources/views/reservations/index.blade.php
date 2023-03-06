@@ -29,6 +29,10 @@
             content: e.event.extendedProps.description
           });
         },
+        selectable: true,
+        select: function(info) {
+          document.location.href = "/facilities/{{ $facility->id }}/reservations/create?start=" + info.startStr + "&end=" + info.endStr;
+        },
         allDaySlot: false,
         slotMinTime: '06:00:00',
         slotMaxTime: '21:00:00',
