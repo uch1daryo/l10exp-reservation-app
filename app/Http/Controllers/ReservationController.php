@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\ReservationRegisteredEvent;
 use App\Http\Resources\ReservationCollection;
 use App\Models\Facility;
 use App\Models\Reservation;
@@ -39,6 +40,8 @@ class ReservationController extends Controller
         $reservation->note = $request->input('note');
         $reservation->cancel_code = hash('sha256', spl_object_hash($reservation));;
         $reservation->save();
+
+        ReservationRegisteredEvent::dispatch($reservation);
 
         return redirect('/facilities/' . $id . '/reservations')->with(
             'status',
