@@ -2,9 +2,11 @@
 
 namespace Tests\Feature;
 
+use App\Mail\ReservationCompletionMail;
 use App\Models\Facility;
 use App\Models\Reservation;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Testing\Fluent\AssertableJson;
 use Tests\TestCase;
 
@@ -104,5 +106,24 @@ class FacilityTest extends TestCase
         ];
         $response = $this->post('/facilities/' . $this->facility->id . '/reservations', $reservation);
         $this->assertDatabaseHas('reservations', $reservation);
+    }
+
+    /**
+     * @test
+     */
+    public function 設備の予約を完了するとお知らせメールが届く(): void
+    {
+        Mail::fake();
+        Mail::assertNothingQueued();
+        $reservation = [
+            'user_name' => '鈴木 花子',
+            'user_email' => 'suzukihanako@example.com',
+            'purpose' => '期末試験',
+            'start_at' => '2023-03-12 09:00:00',
+            'end_at' => '2023-03-12 12:00:00',
+            'note' => '応用数学（佐藤先生）',
+        ];
+        $response = $this->post('/facilities/' . $this->facility->id . '/reservations', $reservation);
+        Mail::assertQueued(ReservationCompletionMail::class);
     }
 }
