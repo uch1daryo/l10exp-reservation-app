@@ -38,7 +38,15 @@ class ReservationController extends Controller
         $reservation->start_at = $request->input('start_at');
         $reservation->end_at = $request->input('end_at');
         $reservation->note = $request->input('note');
-        $reservation->cancel_code = hash('sha256', spl_object_hash($reservation));;
+        $reservation->cancel_code = hash('sha256', implode([
+            $reservation->facility_id,
+            $reservation->user_name,
+            $reservation->user_email,
+            $reservation->purpose,
+            $reservation->start_at,
+            $reservation->end_at,
+            $reservation->note,
+        ]));;
         $reservation->save();
 
         ReservationRegisteredEvent::dispatch($reservation);
