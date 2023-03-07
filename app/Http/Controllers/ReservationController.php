@@ -30,6 +30,16 @@ class ReservationController extends Controller
 
     public function store(Request $request, string $id): RedirectResponse
     {
+        $rules = [
+            'user_name' => ['required'],
+            'user_email' => ['required', 'email'],
+            'purpose' => ['required'],
+            'start_at' => ['required', 'before:end_at'],
+            'end_at' => ['required', 'after:start_at'],
+            'note' => ['nullable'],
+        ];
+        $validated = $request->validate($rules);
+
         $reservation = new Reservation();
         $reservation->facility_id = $id;
         $reservation->user_name = $request->input('user_name');
