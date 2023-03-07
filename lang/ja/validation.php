@@ -16,14 +16,14 @@ return [
     'accepted' => 'The :attribute field must be accepted.',
     'accepted_if' => 'The :attribute field must be accepted when :other is :value.',
     'active_url' => 'The :attribute field must be a valid URL.',
-    'after' => 'The :attribute field must be a date after :date.',
+    'after' => ':attributeには、:dateより後の日時を指定してください。',
     'after_or_equal' => 'The :attribute field must be a date after or equal to :date.',
     'alpha' => 'The :attribute field must only contain letters.',
     'alpha_dash' => 'The :attribute field must only contain letters, numbers, dashes, and underscores.',
     'alpha_num' => 'The :attribute field must only contain letters and numbers.',
     'array' => 'The :attribute field must be an array.',
     'ascii' => 'The :attribute field must only contain single-byte alphanumeric characters and symbols.',
-    'before' => 'The :attribute field must be a date before :date.',
+    'before' => ':attributeには、:dateより前の日時を指定してください。',
     'before_or_equal' => 'The :attribute field must be a date before or equal to :date.',
     'between' => [
         'array' => 'The :attribute field must have between :min and :max items.',
@@ -47,7 +47,7 @@ return [
     'distinct' => 'The :attribute field has a duplicate value.',
     'doesnt_end_with' => 'The :attribute field must not end with one of the following: :values.',
     'doesnt_start_with' => 'The :attribute field must not start with one of the following: :values.',
-    'email' => 'The :attribute field must be a valid email address.',
+    'email' => ':attributeには、有効なメールアドレスを指定してください。',
     'ends_with' => 'The :attribute field must end with one of the following: :values.',
     'enum' => 'The selected :attribute is invalid.',
     'exists' => 'The selected :attribute is invalid.',
@@ -125,7 +125,7 @@ return [
     'prohibited_unless' => 'The :attribute field is prohibited unless :other is in :values.',
     'prohibits' => 'The :attribute field prohibits :other from being present.',
     'regex' => 'The :attribute field format is invalid.',
-    'required' => 'The :attribute field is required.',
+    'required' => ':attributeは必ず指定してください。',
     'required_array_keys' => 'The :attribute field must contain entries for: :values.',
     'required_if' => 'The :attribute field is required when :other is :value.',
     'required_if_accepted' => 'The :attribute field is required when :other is accepted.',
@@ -179,6 +179,12 @@ return [
     |
     */
 
-    'attributes' => [],
+    'attributes' => [
+        'user_name' => '氏名',
+        'user_email' => 'メールアドレス',
+        'purpose' => '利用目的',
+        'start_at' => '利用開始日時',
+        'end_at' => '利用終了日時',
+    ],
 
 ];
