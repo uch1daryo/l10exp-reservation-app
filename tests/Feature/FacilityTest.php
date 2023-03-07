@@ -126,4 +126,14 @@ class FacilityTest extends TestCase
         $response = $this->post('/facilities/' . $this->facility->id . '/reservations', $reservation);
         Mail::assertQueued(ReservationCompletionMail::class);
     }
+
+    /**
+     * @test
+     */
+    public function 不完全な予約を登録しようとするとリダイレクトされる(): void
+    {
+        $reservation = [];
+        $response = $this->post('/facilities/' . $this->facility->id . '/reservations', $reservation);
+        $response->assertStatus(302);
+    }
 }
