@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Exceptions\DoubleBookingException;
 use App\Mail\ReservationCompletionMail;
 use App\Models\Facility;
 use App\Models\Reservation;
@@ -135,5 +136,24 @@ class FacilityTest extends TestCase
         $reservation = [];
         $response = $this->post('/facilities/' . $this->facility->id . '/reservations', $reservation);
         $response->assertStatus(302);
+    }
+
+    /**
+     * @test
+     */
+    public function 重複して予約を登録しようとすると例外が投げられる(): void
+    {
+        $this->withoutExceptionHandling();
+        $this->expectException(DoubleBookingException::class);
+
+        $reservation = [
+            'user_name' => '鈴木 花子',
+            'user_email' => 'suzukihanako@example.com',
+            'purpose' => '期末試験',
+            'start_at' => '2023-03-01 09:00:00',
+            'end_at' => '2023-03-01 12:00:00',
+            'note' => '応用数学（佐藤先生）',
+        ];
+        $response = $this->post('/facilities/' . $this->facility->id . '/reservations', $reservation);
     }
 }
