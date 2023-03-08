@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Events\ReservationRegisteredEvent;
 use App\Exceptions\DoubleBookingException;
+use App\Http\Requests\ReservationStoreRequest;
 use App\Http\Resources\ReservationCollection;
 use App\Models\Facility;
 use App\Models\Reservation;
@@ -29,18 +30,8 @@ class ReservationController extends Controller
         return view('reservations.create', compact('facility', 'period'));
     }
 
-    public function store(Request $request, string $id): RedirectResponse
+    public function store(ReservationStoreRequest $request, string $id): RedirectResponse
     {
-        $rules = [
-            'user_name' => ['required'],
-            'user_email' => ['required', 'email'],
-            'purpose' => ['required'],
-            'start_at' => ['required', 'before:end_at'],
-            'end_at' => ['required', 'after:start_at'],
-            'note' => ['nullable'],
-        ];
-        $validated = $request->validate($rules);
-
         $allOverlap = Reservation::where('facility_id', $id)
             ->where('start_at', '>=', $request->input('start_at'))
             ->Where('end_at', '<=', $request->input('end_at'))
