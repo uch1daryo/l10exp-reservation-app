@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Events\ReservationRegisteredEvent;
+use App\Exceptions\DoubleBookingException;
 use App\Http\Resources\ReservationCollection;
 use App\Models\Facility;
 use App\Models\Reservation;
@@ -39,6 +40,25 @@ class ReservationController extends Controller
             'note' => ['nullable'],
         ];
         $validated = $request->validate($rules);
+
+        $allOverlap = Reservation::where('facility_id', $id)
+            ->where('start_at', '>=', $request->input('start_at'))
+            ->Where('end_at', '<=', $request->input('end_at'))
+            ->count();
+
+        $startOverlap = Reservation::where('facility_id', $id)
+            ->where('start_at', '>', $request->input('start_at'))
+            ->Where('start_at', '<', $request->input('end_at'))
+            ->count();
+
+        $endOverlap = Reservation::where('facility_id', $id)
+            ->where('end_at', '>', $request->input('start_at'))
+            ->Where('end_at', '<', $request->input('end_at'))
+            ->count();
+
+        if ($allOverlap || $startOverlap || $endOverlap) {
+            throw new DoubleBookingException;
+        }
 
         $reservation = new Reservation();
         $reservation->facility_id = $id;
