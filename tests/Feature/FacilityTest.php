@@ -156,4 +156,13 @@ class FacilityTest extends TestCase
         ];
         $response = $this->post('/facilities/' . $this->facility->id . '/reservations', $reservation);
     }
+
+    /**
+     * @test
+     */
+    public function 指定した予約のキャンセル画面を表示できる(): void
+    {
+        $response = $this->get('/facilities/' . $this->facility->id . '/reservations/' . $this->reservation->cancel_code);
+        $response->assertSeeText('キャンセルする');
+    }
 }
