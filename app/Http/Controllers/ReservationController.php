@@ -3,11 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Events\ReservationRegisteredEvent;
-use App\Exceptions\DoubleBookingException;
 use App\Http\Requests\ReservationStoreRequest;
 use App\Http\Resources\ReservationCollection;
 use App\Models\Facility;
-use App\Models\Reservation;
+use App\Usecases\ReservationStoreAction;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -30,29 +29,10 @@ class ReservationController extends Controller
         return view('reservations.create', compact('facility', 'period'));
     }
 
-    public function store(ReservationStoreRequest $request, string $id): RedirectResponse
+    public function store(ReservationStoreRequest $request, string $id, ReservationStoreAction $action): RedirectResponse
     {
-        $allOverlap = Reservation::where('facility_id', $id)
-            ->where('start_at', '>=', $request->input('start_at'))
-            ->Where('end_at', '<=', $request->input('end_at'))
-            ->count();
-
-        $startOverlap = Reservation::where('facility_id', $id)
-            ->where('start_at', '>', $request->input('start_at'))
-            ->Where('start_at', '<', $request->input('end_at'))
-            ->count();
-
-        $endOverlap = Reservation::where('facility_id', $id)
-            ->where('end_at', '>', $request->input('start_at'))
-            ->Where('end_at', '<', $request->input('end_at'))
-            ->count();
-
-        if ($allOverlap || $startOverlap || $endOverlap) {
-            throw new DoubleBookingException;
-        }
-
         $reservation = $request->makeReservation($id);
-        $reservation->save();
+        $action($reservation);
 
         ReservationRegisteredEvent::dispatch($reservation);
 
