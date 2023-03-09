@@ -165,4 +165,19 @@ class FacilityTest extends TestCase
         $response = $this->get('/facilities/' . $this->facility->id . '/reservations/' . $this->reservation->cancel_code);
         $response->assertSeeText('キャンセルする');
     }
+
+    /**
+     * @test
+     */
+    public function 指定した予約をキャンセルできる(): void
+    {
+        $response = $this->delete('/facilities/' . $this->facility->id . '/reservations/' . $this->reservation->cancel_code);
+        $this->assertDatabaseMissing('reservations', [
+            'user_name' => '山田 太郎',
+            'user_email' => 'yamadataro@example.com',
+            'purpose' => '打ち合わせ',
+            'start_at' => '2023-03-01 09:30:00',
+            'end_at' => '2023-03-01 11:00:00',
+        ]);
+    }
 }
