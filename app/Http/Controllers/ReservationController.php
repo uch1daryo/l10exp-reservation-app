@@ -6,6 +6,7 @@ use App\Events\ReservationRegisteredEvent;
 use App\Http\Requests\ReservationStoreRequest;
 use App\Http\Resources\ReservationCollection;
 use App\Models\Facility;
+use App\Models\Reservation;
 use App\Usecases\ReservationStoreAction;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -46,5 +47,12 @@ class ReservationController extends Controller
     {
         $facility = Facility::findOrFail($id);
         return new ReservationCollection($facility->reservations);
+    }
+
+    public function cancel(Request $request, string $id, string $code): View
+    {
+        $facility = Facility::findOrFail($id);
+        $reservation = Reservation::where('cancel_code', $code)->firstOrFail();
+        return view('reservations.cancel', compact('facility', 'reservation'));
     }
 }
