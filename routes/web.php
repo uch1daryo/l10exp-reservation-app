@@ -12,4 +12,5 @@ Route::controller(ReservationController::class)->group(function () {
     Route::get('/facilities/{id}/reservations/create', 'create');
     Route::post('/facilities/{id}/reservations', 'store');
     Route::get('/facilities/{id}/reservations/{code}', 'cancel');
+    Route::delete('/facilities/{id}/reservations/{code}', 'destroy');
 })->whereNumber('id')->whereAlphaNumeric('code');

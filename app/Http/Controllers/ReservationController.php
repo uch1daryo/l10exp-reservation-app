@@ -55,4 +55,15 @@ class ReservationController extends Controller
         $reservation = Reservation::where('cancel_code', $code)->firstOrFail();
         return view('reservations.cancel', compact('facility', 'reservation'));
     }
+
+    public function destroy(Request $request, string $id, string $code): RedirectResponse
+    {
+        $reservation = Reservation::where('cancel_code', $code)->firstOrFail();
+        $reservation->delete();
+
+        return redirect('/facilities/' . $id . '/reservations')->with(
+            'status',
+            'キャンセルが完了しました'
+        );
+    }
 }
