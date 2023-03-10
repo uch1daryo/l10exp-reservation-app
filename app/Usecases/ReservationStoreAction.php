@@ -11,6 +11,15 @@ class ReservationStoreAction
     {
         assert(!$reservation->exists());
 
+        if ($this->existsOverlap($reservation)) {
+            throw new DoubleBookingException;
+        }
+
+        $reservation->save();
+    }
+
+    private function existsOverlap(Reservation $reservation): bool
+    {
         $allOverlap = Reservation::where('facility_id', $reservation->facility_id)
             ->where('start_at', '>=', $reservation->start_at)
             ->Where('end_at', '<=', $reservation->end_at)
@@ -24,9 +33,9 @@ class ReservationStoreAction
             ->Where('end_at', '<', $reservation->end_at)
             ->exists();
         if ($allOverlap || $startOverlap || $endOverlap) {
-            throw new DoubleBookingException;
+            return true;
+        } else {
+            return false;
         }
-
-        $reservation->save();
     }
 }
