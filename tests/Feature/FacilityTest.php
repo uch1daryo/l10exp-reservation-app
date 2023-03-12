@@ -35,6 +35,8 @@ class FacilityTest extends TestCase
         $this->reservation->end_at = '2023-03-01 11:00:00';
         $this->reservation->cancel_code = hash('sha256', spl_object_hash($this->reservation));
         $this->reservation->save();
+
+        $this->artisan('slot:add ' . 2023);
     }
 
     /**
