@@ -3,7 +3,9 @@
 namespace App\Usecases;
 
 use App\Exceptions\DoubleBookingException;
+use App\Exceptions\InvalidTimeBookingException;
 use App\Models\Reservation;
+use App\Models\Slot;
 
 class ReservationStoreAction
 {
@@ -13,6 +15,9 @@ class ReservationStoreAction
 
         if ($this->existsOverlap($reservation)) {
             throw new DoubleBookingException;
+        }
+        if ($this->isUnavailableTimeBooking($reservation)) {
+            throw new InvalidTimeBookingException;
         }
 
         $reservation->save();
@@ -37,5 +42,26 @@ class ReservationStoreAction
         } else {
             return false;
         }
+    }
+
+    private function isUnavailableTimeBooking(Reservation $reservation): bool
+    {
+        $startDay = date('Y-m-d', strtotime($reservation->start_at));
+        $endDay = date('Y-m-d', strtotime($reservation->end_at));
+        if ($startDay !== $endDay)
+            return true;
+
+        $slot = Slot::where('date', $startDay)->first();
+        if ($slot === null)
+            return true;
+
+        $startTime = date('H:i:s', strtotime($reservation->start_at));
+        $endTime = date('H:i:s', strtotime($reservation->end_at));
+        if ($slot->start_at > $startTime)
+            return true;
+        if ($slot->end_at < $endTime)
+            return true;
+
+        return false;
     }
 }
