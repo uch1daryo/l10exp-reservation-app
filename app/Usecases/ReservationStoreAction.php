@@ -4,6 +4,7 @@ namespace App\Usecases;
 
 use App\Exceptions\DoubleBookingException;
 use App\Exceptions\InvalidTimeBookingException;
+use App\Exceptions\BanTimeBookingException;
 use App\Models\Reservation;
 use App\Models\Slot;
 
@@ -18,6 +19,9 @@ class ReservationStoreAction
         }
         if ($this->isUnavailableTimeBooking($reservation)) {
             throw new InvalidTimeBookingException;
+        }
+        if ($this->isBanTimeBooking($reservation)) {
+            throw new BanTimeBookingException;
         }
 
         $reservation->save();
@@ -60,6 +64,28 @@ class ReservationStoreAction
         if ($slot->start_at > $startTime)
             return true;
         if ($slot->end_at < $endTime)
+            return true;
+
+        return false;
+    }
+
+    private function isBanTimeBooking(Reservation $reservation): bool
+    {
+        $startDay = date('Y-m-d', strtotime($reservation->start_at));
+        $slot = Slot::where('date', $startDay)->first();
+        if ($slot === null)
+            return true;
+
+        $startTime = date('H:i:s', strtotime($reservation->start_at));
+        $endTime = date('H:i:s', strtotime($reservation->end_at));
+
+        if ($startTime <= $slot->ban_start_at && $slot->ban_end_at <= $endTime)
+            return true;
+
+        if ($startTime < $slot->ban_start_at && $slot->ban_start_at < $endTime)
+            return true;
+
+        if ($startTime < $slot->ban_end_at && $slot->ban_end_at < $endTime)
             return true;
 
         return false;
