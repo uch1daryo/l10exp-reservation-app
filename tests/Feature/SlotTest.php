@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Exceptions\BanTimeBookingException;
 use App\Exceptions\InvalidTimeBookingException;
 use App\Models\Facility;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -71,6 +72,27 @@ class SlotTest extends TestCase
             'purpose' => '期末試験',
             'start_at' => '2023-03-01 21:00:00',
             'end_at' => '2023-03-01 22:00:00',
+            'note' => '応用数学（佐藤先生）',
+        ];
+        $response = $this->post('/facilities/' . $this->facility->id . '/reservations', $reservation);
+    }
+
+    /**
+     * @test
+     */
+    public function 利用禁止の時間帯に予約を登録しようすると例外が投げられる(): void
+    {
+        $this->withoutExceptionHandling();
+        $this->expectException(BanTimeBookingException::class);
+
+        $this->artisan('slot:add ' . 2023)->assertExitCode(0);
+
+        $reservation = [
+            'user_name' => '鈴木 花子',
+            'user_email' => 'suzukihanako@example.com',
+            'purpose' => '期末試験',
+            'start_at' => '2023-03-01 12:00:00',
+            'end_at' => '2023-03-01 13:00:00',
             'note' => '応用数学（佐藤先生）',
         ];
         $response = $this->post('/facilities/' . $this->facility->id . '/reservations', $reservation);
